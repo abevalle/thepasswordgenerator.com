@@ -7,8 +7,10 @@ export default function  CreateForm () {
         AZ: boolean,
         num: boolean,
         special: boolean,
-        length: number
+        pwLength: number
     }
+
+
 
     const generatePassword = (opts:optsInterface) => {
 
