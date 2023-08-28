@@ -2,9 +2,9 @@
 
 import CreateForm from "./CreateForm"
 import Footer from "./footer"
+import Script from 'next/script'
 
 export default function Home() {
-
   return (
     <main className="min-w-screen min-h-screen bg-gray-900">
       <section className="content">
