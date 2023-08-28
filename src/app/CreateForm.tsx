@@ -54,13 +54,11 @@ export default function  CreateForm () {
     })
 
     return(
-        <div className="flex items-center justify-center" onLoad={() => {}}>
+        <div className="flex items-center justify-center generator" onLoad={() => {}}>
             <form className="w-full max-w-sm">
-                {/* <input type="textArea" disabled placeholder='Password Will Show Here' id="generatedPassword" className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></input><br/> */}
-
                 <div className="sm:flex rounded-md shadow-sm">
                     <input type="text" id="generatedPassword" className="py-3 px-4 pr-11 block w-full border-gray-200 shadow-sm -mt-px -ml-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-l-lg sm:mt-0 sm:first:ml-0 sm:first:rounded-tr-none sm:last:rounded-bl-none sm:last:rounded-r-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"/>
-                    <span className="copy" onClick={() => {let password = (document.getElementById('generatedPassword') as HTMLInputElement)!.value; navigator.clipboard.writeText(password)}} className="py-3 px-4 inline-flex items-center min-w-fit w-full border border-gray-200 bg-gray-50 text-sm text-gray-500 -mt-px -ml-px first:rounded-t-lg last:rounded-b-lg sm:w-auto sm:first:rounded-l-lg sm:mt-0 sm:first:ml-0 sm:first:rounded-tr-none sm:last:rounded-bl-none sm:last:rounded-r-lg dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400">Copy</span>
+                    <span onClick={() => {let password = (document.getElementById('generatedPassword') as HTMLInputElement)!.value; navigator.clipboard.writeText(password)}} className="py-3 px-4 inline-flex items-center min-w-fit w-full border border-gray-200 bg-gray-50 text-sm text-gray-500 -mt-px -ml-px first:rounded-t-lg last:rounded-b-lg sm:w-auto sm:first:rounded-l-lg sm:mt-0 sm:first:ml-0 sm:first:rounded-tr-none sm:last:rounded-bl-none sm:last:rounded-r-lg dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 copy">Copy</span>
                 </div>
 
                 <label className="mb-2 inline-block text-neutral-700 dark:text-neutral-200">Password Length</label>

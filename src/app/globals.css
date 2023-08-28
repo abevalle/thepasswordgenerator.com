@@ -13,7 +13,9 @@ h1 {
 }
 
 .content {
-  padding: 15vh;
+  padding-top: 15vh;
+  padding-left: 35px;
+  padding-right: 35px;
 }
 
 .footer {
@@ -24,4 +26,7 @@ h1 {
 
 .copy:hover {
   cursor: pointer;
+}
+
+.generator {
 }
