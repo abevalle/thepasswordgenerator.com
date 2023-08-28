@@ -11,3 +11,13 @@ p {
 h1 {
   color: white; font-family: 'Poppins', sans-serif;
 }
+
+.content {
+  padding: 15vh;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
