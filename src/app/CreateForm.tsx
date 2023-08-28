@@ -2,7 +2,15 @@
 
 export default function  CreateForm () {
 
-    const generatePassword = (opts:object) => {
+    interface optsInterface {
+        az: boolean,
+        AZ: boolean,
+        num: boolean,
+        special: boolean,
+        length: number
+    }
+
+    const generatePassword = (opts:optsInterface) => {
 
         let result = ''
         let AZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
