@@ -19,7 +19,6 @@ export default function  CreateForm () {
         let az = "abcdefghijklmnopqrstuvwxyz"
         let num = "0123456789"
         let special ="!@$%&_"
-        let length = 16
         let chars = []
 
         if (opts.AZ) {chars.push(AZ)}
@@ -35,14 +34,14 @@ export default function  CreateForm () {
             counter += 1
         }
         console.log(result)
-        document.getElementById('generatedPassword').value = result
+        (document.getElementById('generatedPassword') as HTMLInputElement)!.value = result
 
     }
 
     const updateRangeValue = () => {
-        let newValue = document.getElementById('pwLength').value
+        let newValue = (document.getElementById('pwLength') as HTMLInputElement)!.value
         let target = document.getElementById('pwLengthValue')
-        target.innerHTML = newValue
+        target!.innerHTML = newValue
     }
 
     return(
@@ -82,7 +81,7 @@ export default function  CreateForm () {
                         AZ: (document.getElementById('AZ') as HTMLInputElement).checked,
                         num: (document.getElementById('num') as HTMLInputElement).checked,
                         special: (document.getElementById('special') as HTMLInputElement).checked,
-                        pwLength: (document.getElementById('pwLength') as HTMLInputElement).value
+                        pwLength: +(document.getElementById('pwLength') as HTMLInputElement).value
                     }
                     generatePassword(opts)
                     }}>Generate Password</button>
