@@ -1,4 +1,5 @@
 "use client"
+import React, { useState, useEffect } from 'react';
 
 export default function  CreateForm () {
 
@@ -43,10 +44,25 @@ export default function  CreateForm () {
         target!.innerHTML = newValue
     }
 
+    const load = (opts:optsInterface) => {
+        updateRangeValue()
+        generatePassword(opts)
+    }
+
+    useEffect(() => {
+        load({az: true, AZ: true, num: true, special: false, pwLength: 32})
+    })
+
     return(
-        <div className="flex items-center justify-center" onLoad={() => {updateRangeValue()}}>
+        <div className="flex items-center justify-center" onLoad={() => {}}>
             <form className="w-full max-w-sm">
-                <input type="text" disabled placeholder='Password Will Show Here' id="generatedPassword" className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></input><br/>
+                {/* <input type="textArea" disabled placeholder='Password Will Show Here' id="generatedPassword" className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></input><br/> */}
+
+                <div className="sm:flex rounded-md shadow-sm">
+                    <input type="text" id="generatedPassword" className="py-3 px-4 pr-11 block w-full border-gray-200 shadow-sm -mt-px -ml-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-l-lg sm:mt-0 sm:first:ml-0 sm:first:rounded-tr-none sm:last:rounded-bl-none sm:last:rounded-r-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"/>
+                    <span className="copy" onClick={() => {let password = (document.getElementById('generatedPassword') as HTMLInputElement)!.value; navigator.clipboard.writeText(password)}} className="py-3 px-4 inline-flex items-center min-w-fit w-full border border-gray-200 bg-gray-50 text-sm text-gray-500 -mt-px -ml-px first:rounded-t-lg last:rounded-b-lg sm:w-auto sm:first:rounded-l-lg sm:mt-0 sm:first:ml-0 sm:first:rounded-tr-none sm:last:rounded-bl-none sm:last:rounded-r-lg dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400">Copy</span>
+                </div>
+
                 <label className="mb-2 inline-block text-neutral-700 dark:text-neutral-200">Password Length</label>
                 <input type="range" min="8" max="256" id="pwLength" onChange={() => {updateRangeValue()}} className="transparent h-[4px] w-full cursor-pointer appearance-none border-transparent bg-neutral-200 dark:bg-neutral-600"/>
                 <p id="pwLengthValue"></p>
@@ -73,6 +89,7 @@ export default function  CreateForm () {
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                 <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">!@$%&</span>
                 </label><br/>
+
                 <button type="button" id="submit" name="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 onClick={() => {
                     let opts = {
