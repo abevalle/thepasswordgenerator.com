@@ -33,7 +33,6 @@ export default function  CreateForm () {
             result += charList.charAt(Math.floor(Math.random()*charListLength));
             counter += 1
         }
-        console.log(result)
         (document.getElementById('generatedPassword') as HTMLInputElement)!.value = result
 
     }
