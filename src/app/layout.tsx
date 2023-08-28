@@ -18,8 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>{children}</body>
-      <Script async src="https://www.googletagmanager.com/gtag/js?id=G-4HNF0DRJMG"></Script>
-      <Script>
+      <Script id="423h4j" async src="https://www.googletagmanager.com/gtag/js?id=G-4HNF0DRJMG"></Script>
+      <Script id="3j42l3h">
         {`window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
