@@ -62,8 +62,10 @@ export default function  CreateForm () {
                 </div>
 
                 <label className="mb-2 inline-block text-neutral-700 dark:text-neutral-200">Password Length</label>
-                <input type="range" min="8" max="256" id="pwLength" onChange={() => {updateRangeValue()}} className="transparent h-[4px] w-full cursor-pointer appearance-none border-transparent bg-neutral-200 dark:bg-neutral-600"/>
-                <p id="pwLengthValue"></p>
+                <div>
+                    <p id="pwLengthValue" className="w-1/3 inline"></p>
+                    <input type="range" min="8" max="256" id="pwLength" onChange={() => {updateRangeValue()}} className="ml-12 transparent h-[4px] inline w-2/3 cursor-pointer appearance-none border-transparent bg-neutral-200 dark:bg-neutral-600"/>
+                </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                 <input type='checkbox' id="az" name="a-z"  className="sr-only peer" defaultChecked></input>
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
