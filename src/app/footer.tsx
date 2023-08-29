@@ -9,8 +9,8 @@ export default function Footer() {
       <div
         className="w-full p-4 text-center bg-gray-800">
         <p>© 2023 Copyright:
-        <a className="text-white" href="https://valle.us/"
-          > ValleUS</a></p>
+        <a className="text-white" href="https://abevalle.us/"
+          > AbeValle</a></p>
       </div>
     </footer>
   )
