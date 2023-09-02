@@ -112,7 +112,7 @@ export default function  CreateForm () {
                         num: (document.getElementById('num') as HTMLInputElement).checked,
                         special: (document.getElementById('special') as HTMLInputElement).checked,
                         pwLength: +(document.getElementById('pwLength') as HTMLInputElement).value,
-                        ambiguous: +(document.getElementById('ambiguous') as HTMLInputElement).checked
+                        ambiguous: (document.getElementById('ambiguous') as HTMLInputElement).checked
                     }
                     generatePassword(opts)
                     }}>Generate Password</button>
