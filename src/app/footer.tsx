@@ -8,7 +8,7 @@ export default function Footer() {
       style={{"backgroundColor": "#0a4275", "marginTop": "auto"}}>
       <div
         className="w-full p-4 text-center bg-gray-800">
-        <p>© 2023 Copyright:
+        <p>© 2024 Copyright:
         <a className="text-white" href="https://abevalle.com/"
           > AbeValle</a></p>
       </div>

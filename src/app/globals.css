@@ -26,6 +26,14 @@ h1 {
 
 .copy:hover {
   cursor: pointer;
+  background-color: #3b82f6;
+  color: white;
+}
+
+.copy:active {
+  cursor: pointer;
+  background-color: #1d4ed8;
+  color: white;
 }
 
 .generator {
