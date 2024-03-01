@@ -61,7 +61,7 @@ export default function  CreateForm () {
 
     const holdFocus = () => {
         let button = document.getElementById('copypw');
-        button.onclick = function () {
+        button!.onclick = function () {
             console.log('copied')
             button?.focus();
             window.setTimeout(function () {
