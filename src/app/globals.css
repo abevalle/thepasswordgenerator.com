@@ -24,16 +24,24 @@ h1 {
   width: 100%;
 }
 
+.copy::after {
+  content: 'Copy';
+}
+
 .copy:hover {
   cursor: pointer;
   background-color: #3b82f6;
   color: white;
 }
 
-.copy:active {
+.copy:focus {
   cursor: pointer;
   background-color: #1d4ed8;
   color: white;
+}
+
+.copy:focus::after {
+  content: 'Copied!';
 }
 
 .generator {
