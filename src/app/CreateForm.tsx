@@ -46,14 +46,34 @@ export default function  CreateForm () {
 
     }
 
-    const updateRangeValue = () => {
+    const comapreInputs = (slider:number, input:number) => {
+        if (input > slider) {
+            return true
+        }
+    }
+
+    const updateInputValue = () => {
         let newValue = (document.getElementById('pwLength') as HTMLInputElement)!.value
-        let target = document.getElementById('pwLengthValue')
-        target!.innerHTML = newValue
+        let target = (document.getElementById('pwLengthValue') as HTMLInputElement)
+        
+        if(newValue > target.value) {
+            console.log('changing inputs')
+            target!.value = newValue
+        }
+    }
+
+    const updateSliderValue = () => {
+        let newValue = (document.getElementById('pwLengthValue') as HTMLInputElement)!.value
+        let target = (document.getElementById('pwLength') as HTMLInputElement)
+        
+        if(newValue > target.value) {
+            console.log('changing inputs')
+            target!.value = newValue
+        }
     }
 
     const load = (opts:optsInterface) => {
-        updateRangeValue()
+        updateInputValue()
         generatePassword(opts)
     }
 
@@ -70,8 +90,8 @@ export default function  CreateForm () {
                 </div>
                 <div className="mt-2 mb-2">
                     <label className="w-full block text-neutral-700 dark:text-neutral-200">Password Length</label>
-                    <label id="pwLengthValue" className="w-1/4 inline mr-12 text-white static"></label>
-                    <input type="range" min="8" max="256" id="pwLength" onChange={() => {updateRangeValue()}} className="transparent h-[4px] inline w-3/4 cursor-pointer appearance-none border-transparent bg-neutral-200 dark:bg-neutral-600"/>
+                    <input type="number" onInput={() => {updateSliderValue()}} id="pwLengthValue" className="w-1/4 inline mr-12 text-dark static"></input>
+                    <input type="range" min="8" max="256" id="pwLength" onChange={() => {updateInputValue()}} className="transparent h-[4px] inline w-3/4 cursor-pointer appearance-none border-transparent bg-neutral-200 dark:bg-neutral-600"/>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                 <input type='checkbox' id="az" name="a-z"  className="sr-only peer" defaultChecked></input>
