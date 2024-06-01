@@ -31,8 +31,6 @@ export const metadata: Metadata = {
     title: 'The Password Generator - Secure & Random Passwords',
     description: 'Generate secure, random passwords with The Password Generator. Enhance your online security with strong, unique passwords.',
     image: 'https://thepasswordgenerator.com/path/to/your/image.jpg',
-    site: '@your_twitter_handle',
-    creator: '@your_twitter_handle',
   },
   canonical: 'https://thepasswordgenerator.com',
 };

@@ -72,7 +72,7 @@ export default function CreateForm() {
 
     useEffect(() => {
         updateGeneratedPassword(passwordOpts);
-    }, [passwordOpts]);
+    }, [passwordOpts, updateGeneratedPassword]);
 
     const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newLength = +e.target.value;
@@ -142,7 +142,9 @@ export default function CreateForm() {
                         className="py-3 px-4 pr-11 block w-full border-gray-200 shadow-sm -mt-px -ml-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-l-lg sm:mt-0 sm:first:ml-0 sm:first:rounded-tr-none sm:last:rounded-bl-none sm:last:rounded-r-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400" 
                         readOnly 
                     />
-                    <span id="copypw" tabIndex={0} onClick={handleCopyPassword} className="py-3 px-4 inline-flex items-center min-w-fit w-full border border-gray-200 bg-gray-50 text-sm text-gray-500 -mt-px -ml-px first:rounded-t-lg last:rounded-b-lg sm:w-auto sm:first:rounded-l-lg sm:mt-0 sm:first:ml-0 sm:first:rounded-tr-none sm:last:rounded-bl-none sm:last:rounded-r-lg dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 copy"/>
+                    <span id="copypw" tabIndex={0} onClick={handleCopyPassword} className="py-3 px-4 inline-flex items-center min-w-fit w-full border border-gray-200 bg-gray-50 text-sm text-gray-500 -mt-px -ml-px first:rounded-t-lg last:rounded-b-lg sm:w-auto sm:first:rounded-l-lg sm:mt-0 sm:first:ml-0 sm:first:rounded-tr-none sm:last:rounded-bl-none sm:last:rounded-r-lg dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 copy">
+                        Copy
+                    </span>
                 </div>
                 <div className="mt-2 mb-2">
                     <label className="w-full block text-neutral-700 dark:text-neutral-200 mb-2">Password Length</label>
