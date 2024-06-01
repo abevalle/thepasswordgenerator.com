@@ -9,7 +9,6 @@ export const metadata: Metadata = {
   title: 'The Password Generator - Secure & Random Passwords',
   description: 'Generate secure, random passwords with The Password Generator. Enhance your online security with strong, unique passwords.',
   keywords: 'password generator, passwords, security, strong passwords, random passwords, online security',
-  author: 'The Password Generator Team',
   viewport: 'width=device-width, initial-scale=1.0',
   openGraph: {
     type: 'website',
@@ -27,12 +26,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    url: 'https://thepasswordgenerator.com',
     title: 'The Password Generator - Secure & Random Passwords',
     description: 'Generate secure, random passwords with The Password Generator. Enhance your online security with strong, unique passwords.',
-    image: 'https://thepasswordgenerator.com/path/to/your/image.jpg',
   },
-  canonical: 'https://thepasswordgenerator.com',
 };
 
 export default function RootLayout({
