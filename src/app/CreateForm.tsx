@@ -5,7 +5,7 @@ import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import Toast from './Toast'; // Adjust the import path as necessary
 import ReactGA from 'react-ga4';
 
-ReactGA.initialize('YOUR_GA_TRACKING_ID'); // Replace with your actual GA tracking ID
+ReactGA.initialize('G-4HNF0DRJMG'); // Replace with your actual GA tracking ID
 
 export default function CreateForm() {
 
