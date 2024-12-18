@@ -20,7 +20,7 @@ const Toast: React.FC<ToastProps> = ({ message, type, onClose }) => {
   const textColor = type === 'success' ? 'text-green-700' : 'text-red-700';
 
   return (
-    <div className={`fixed bottom-5 right-5 flex items-center w-full max-w-xs p-4 ${textColor} ${bgColor} border-l-4 ${borderColor} rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 z-50`} role="alert">
+    <div className={`fixed bottom-4 inset-x-4 sm:bottom-5 sm:right-5 sm:inset-x-auto flex items-center w-auto max-w-xs p-4 ${textColor} ${bgColor} border-l-4 ${borderColor} rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 z-50`} role="alert">
       <FontAwesomeIcon icon={icon} className={`mr-2 ${textColor}`} />
       <div className="text-sm font-normal">
         {message}

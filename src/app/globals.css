@@ -1,37 +1,116 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  --neon-purple: rgba(168, 85, 247, 0.4);
+  --neon-blue: rgba(99, 102, 241, 0.4);
+}
+
+body {
+  background: #0a0a0f;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
 p {
   color: white
 }
 
-h1 {
-  color: white; font-family: 'Poppins', sans-serif;
+h1, h2, h3, h4, h5 {
+  font-family: 'Poppins', sans-serif;
+  color: white;
+}
+
+.mesh-gradient {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background: 
+    radial-gradient(circle at 50% 0%, var(--neon-purple), transparent 50%),
+    radial-gradient(circle at 85% 30%, var(--neon-blue), transparent 50%);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .content {
-  padding-top: 15vh;
+  position: relative;
+  z-index: 1;
+  padding-top: 4vh;
   padding-left: 35px;
   padding-right: 35px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.footer {
-  position: fixed;
-  bottom: 0;
+.generator-form {
+  background: rgba(15, 15, 20, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 
+    0 0 40px rgba(168, 85, 247, 0.1),
+    inset 0 0 20px rgba(99, 102, 241, 0.05);
+  transition: all 0.3s ease;
+}
+
+.generator-form:hover {
+  box-shadow: 
+    0 0 50px rgba(168, 85, 247, 0.15),
+    inset 0 0 30px rgba(99, 102, 241, 0.08);
+}
+
+.password-input {
+  background: rgba(10, 10, 15, 0.8);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  transition: all 0.3s ease;
+  font-family: 'Space Grotesk', monospace;
+  letter-spacing: 0.5px;
+}
+
+.password-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.neon-button {
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  position: relative;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.neon-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
   width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: 0.5s;
 }
 
-.copy::after {
-  content: 'Copy';
+.neon-button:hover::before {
+  left: 100%;
 }
 
-.copy:hover {
-  cursor: pointer;
-  background-color: #3b82f6;
-  color: white;
+.copy-button {
+  background: var(--primary-gradient);
+  transition: all 0.3s ease;
+}
+
+.copy-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
 .copy:focus {
@@ -45,6 +124,28 @@ h1 {
 }
 
 .generator {
+}
+
+.site-title {
+  font-family: 'Space Grotesk', sans-serif;
+  background: linear-gradient(135deg, #fff 0%, #a8b3cf 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+}
+
+.site-title::after {
+  content: 'v2.0';
+  position: absolute;
+  top: 0;
+  right: -3rem;
+  font-size: 0.9rem;
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0.8;
 }
 
 /* Tooltip container */
@@ -88,4 +189,157 @@ h1 {
 .tooltip-container:hover .tooltip-text {
   visibility: visible;
   opacity: 1;
+}
+
+.footer {
+  background: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.slider {
+  height: 6px;
+  background: var(--primary-gradient);
+  border-radius: 3px;
+}
+
+.slider::-webkit-slider-thumb {
+  width: 20px;
+  height: 20px;
+  background: white;
+  border: 3px solid #6366f1;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+/* Form element styles */
+input[type="number"] {
+  @apply bg-opacity-20;
+  padding: 0.5rem;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  transition: all 0.3s ease;
+}
+
+input[type="number"]:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  outline: none;
+}
+
+/* Slider modifications */
+input[type="range"] {
+  height: 6px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border-radius: 3px;
+  -webkit-appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border: 3px solid #6366f1;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+}
+
+/* Toggle switch modifications */
+.peer:checked + div {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+}
+
+.peer:focus + div {
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.peer + div::after {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.peer:checked + div::after {
+  transform: translateX(100%);
+  background: white;
+}
+
+/* Input number spinner buttons */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  opacity: 1;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border-radius: 4px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+/* Tooltip refinements */
+.tooltip-container .tooltip-text {
+  background: rgba(15, 15, 20, 0.9);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.tooltip-container .tooltip-text::after {
+  border-top-color: rgba(15, 15, 20, 0.9);
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+    .content {
+        padding-top: 2vh;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .site-title::after {
+        top: -0.5rem;
+        right: -2rem;
+        font-size: 0.8rem;
+    }
+
+    .generator-form {
+        margin: 0 8px;
+    }
+
+    /* Improve touch targets */
+    input[type="range"]::-webkit-slider-thumb {
+        width: 24px;
+        height: 24px;
+    }
+
+    .tooltip-container .tooltip-text {
+        width: 160px;
+        margin-left: -80px;
+    }
+}
+
+/* Improve touch targets for mobile */
+@media (hover: none) {
+    .neon-button {
+        min-height: 48px;
+    }
+
+    input[type="checkbox"] + div {
+        min-width: 48px;
+        min-height: 28px;
+    }
+
+    input[type="number"] {
+        min-height: 48px;
+        font-size: 16px; /* Prevent iOS zoom on focus */
+    }
 }

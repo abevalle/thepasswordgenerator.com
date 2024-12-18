@@ -133,18 +133,22 @@ export default function CreateForm() {
             {toastMessage && (
                 <Toast message={toastMessage.message} type={toastMessage.type} onClose={() => setToastMessage(null)} />
             )}
-            <form className="w-full max-w-sm bg-gray-800 p-5 rounded shadow">
-                <div className="sm:flex rounded-md shadow-sm">
+            <form className="generator-form w-full max-w-md p-4 sm:p-8 rounded-2xl">
+                <div className="flex flex-col sm:flex-row rounded-xl overflow-hidden mb-6 sm:mb-8 group">
                     <input 
                         type="text" 
                         id="generatedPassword" 
                         value={generatedPassword} 
-                        className="py-3 px-4 pr-11 block w-full border-gray-200 shadow-sm -mt-px -ml-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-l-lg sm:mt-0 sm:first:ml-0 sm:first:rounded-tr-none sm:last:rounded-bl-none sm:last:rounded-r-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400" 
+                        className="password-input py-3 sm:py-4 px-3 sm:px-4 block w-full text-lg sm:text-xl text-purple-100 rounded-xl sm:rounded-l-xl sm:rounded-r-none mb-2 sm:mb-0" 
                         readOnly 
                     />
-                    <span id="copypw" tabIndex={0} onClick={handleCopyPassword} className="py-3 px-4 inline-flex items-center min-w-fit w-full border border-gray-200 bg-gray-50 text-sm text-gray-500 -mt-px -ml-px first:rounded-t-lg last:rounded-b-lg sm:w-auto sm:first:rounded-l-lg sm:mt-0 sm:first:ml-0 sm:first:rounded-tr-none sm:last:rounded-bl-none sm:last:rounded-r-lg dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 copy">
+                    <button
+                        type="button"
+                        onClick={handleCopyPassword}
+                        className="neon-button w-full sm:w-auto px-4 sm:px-8 py-3 sm:py-4 text-white font-semibold whitespace-nowrap"
+                    >
                         Copy
-                    </span>
+                    </button>
                 </div>
                 <div className="mt-2 mb-2">
                     <label className="w-full block text-neutral-700 dark:text-neutral-200 mb-2">Password Length</label>
@@ -179,8 +183,13 @@ export default function CreateForm() {
                     <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Avoid Ambiguous Characters <FontAwesomeIcon icon={faCircleInfo} /></span>
                     <span className="tooltip-text">Avoid characters like &apos;0&apos;, &apos;O&apos;, &apos;I&apos;, and &apos;l&apos; to reduce ambiguity.</span>
                 </label><br />
-                <button type="button" id="submit" name="submit" className="w-full mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={handleGeneratePasswordClick}>Generate Password</button>
+                <button 
+                    type="button" 
+                    onClick={handleGeneratePasswordClick} 
+                    className="neon-button w-full mt-8 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5"
+                >
+                    Generate Password
+                </button>
             </form>
         </div>
     );
