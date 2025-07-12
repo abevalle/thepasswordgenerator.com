@@ -1822,37 +1822,37 @@ Minimal personal information:
 
 ### The Random Approach
 **Best for**: Password manager users
-```
+\`\`\`
 Banking: K#mP9$xL2@nW5&qR8*zY
 Email: j7Fb%Nx3Qw!Vm9Kc@Hs5Lp
 Social: aT4*Gn8&Zx2#Wp6$Br9@Yq
-```
+\`\`\`
 
 ### The Passphrase Method
 **Best for**: Memorized passwords
-```
+\`\`\`
 Email: Correct-Horse-Battery-Staple-2025!
 Banking: Moonlight$Dances%On#Ocean^Waves
 Work: ProjectDeadline-Met-Coffee-Helped
-```
+\`\`\`
 
 ### The Pattern System
 **Best for**: Multiple related accounts
-```
+\`\`\`
 Base pattern: [Service]#[Category]$[Year]
 Amazon: Amzn#Shop$2025!
 Netflix: Nflx#Stream$2025!
 Spotify: Sptfy#Music$2025!
-```
+\`\`\`
 
 ### The Algorithmic Method
 **Best for**: No password manager scenarios
-```
+\`\`\`
 Formula: [First 3 of site] + [personal code] + [category] + [symbol]
 Facebook: FAC+X9y2+SOC+#
 LinkedIn: LIN+X9y2+PRO+#
 Twitter: TWI+X9y2+SOC+#
-```
+\`\`\`
 
 ## Security Maintenance Schedule
 
@@ -2130,7 +2130,7 @@ Discovering your password has been breached can be panic-inducing. This comprehe
 ### What to Say
 
 **Template for notifications**:
-```
+\`\`\`
 Subject: Security Notice - [Your Name]
 
 I recently discovered a potential security breach affecting my [account type]. 
@@ -2143,7 +2143,7 @@ Please be aware of any unusual communications appearing to come from me.
 If you receive any suspicious messages, please verify through alternative means.
 
 [Your name]
-```
+\`\`\`
 
 ## Recovery Best Practices
 
@@ -2305,25 +2305,25 @@ Password generators are essential tools for creating strong, unique passwords. B
 
 ### The Basic Algorithm
 
-```
+\`\`\`
 1. Define character set
 2. Determine password length
 3. Generate random numbers
 4. Map numbers to characters
 5. Combine into password
 6. Verify requirements met
-```
+\`\`\`
 
 ### Character Set Selection
 
 **Common character sets**:
-```
+\`\`\`
 Lowercase: abcdefghijklmnopqrstuvwxyz (26)
 Uppercase: ABCDEFGHIJKLMNOPQRSTUVWXYZ (26)
 Numbers: 0123456789 (10)
 Symbols: !@#$%^&*()-_=+[]{}|;:,.<>? (32)
 Extended: Including space and others (95+)
-```
+\`\`\`
 
 **Ambiguous characters**:
 - Often excluded: 0, O, l, 1, I
@@ -2334,44 +2334,44 @@ Extended: Including space and others (95+)
 ### The Generation Process
 
 **Step 1: Initialization**
-```javascript
+\`\`\`javascript
 // Define available characters
 const lowercase = 'abcdefghijklmnopqrstuvwxyz';
 const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const numbers = '0123456789';
 const symbols = '!@#$%^&*';
-```
+\`\`\`
 
 **Step 2: Build character pool**
-```javascript
+\`\`\`javascript
 let charPool = '';
 if (useLowercase) charPool += lowercase;
 if (useUppercase) charPool += uppercase;
 if (useNumbers) charPool += numbers;
 if (useSymbols) charPool += symbols;
-```
+\`\`\`
 
 **Step 3: Generate password**
-```javascript
+\`\`\`javascript
 let password = '';
 for (let i = 0; i < length; i++) {
   const randomIndex = secureRandom(charPool.length);
   password += charPool[randomIndex];
 }
-```
+\`\`\`
 
 ## Cryptographic Security
 
 ### Secure Random Number Generation
 
 **Web Crypto API**:
-```javascript
+\`\`\`javascript
 function secureRandom(max) {
   const array = new Uint32Array(1);
   crypto.getRandomValues(array);
   return array[0] % max;
 }
-```
+\`\`\`
 
 **Why crypto.getRandomValues()?**
 - Cryptographically strong
@@ -2401,18 +2401,18 @@ function secureRandom(max) {
 ### Pronounceable Passwords
 
 **Alternating consonants/vowels**:
-```
+\`\`\`
 Pattern: CVCVCVCV
 Result: takomelo
 Easier to remember but less secure
-```
+\`\`\`
 
 **Syllable-based**:
-```
+\`\`\`
 Syllables: [ba, ko, mi, ru, te]
 Result: bakomirute
 Natural language feel
-```
+\`\`\`
 
 ### Passphrase Generation
 
@@ -2424,22 +2424,22 @@ Natural language feel
 - Number/symbol insertion
 
 **Example generation**:
-```
+\`\`\`
 Words: [correct, horse, battery, staple]
 Basic: correct-horse-battery-staple
 Enhanced: Correct#Horse2Battery$Staple
-```
+\`\`\`
 
 ### Pattern-Based Generation
 
 **Custom patterns**:
-```
+\`\`\`
 Pattern: Llnn-LLNN-llnn
 L = uppercase letter
 l = lowercase letter
 n = number
 Result: Km73-QWER-gh19
-```
+\`\`\`
 
 **Use cases**:
 - License key generation
@@ -2452,9 +2452,9 @@ Result: Km73-QWER-gh19
 ### Entropy Calculation
 
 **Formula**:
-```
+\`\`\`
 Entropy = log2(charset_size^password_length)
-```
+\`\`\`
 
 **Real-world examples**:
 - 8 chars, lowercase only: log2(26^8) = 37.6 bits
@@ -2599,7 +2599,7 @@ Entropy = log2(charset_size^password_length)
 ### Integration Methods
 
 **API integration**:
-```javascript
+\`\`\`javascript
 class PasswordGenerator {
   generate(options) {
     const config = this.parseOptions(options);
@@ -2607,7 +2607,7 @@ class PasswordGenerator {
     return this.createPassword(pool, config.length);
   }
 }
-```
+\`\`\`
 
 **Library usage**:
 - generate-password (npm)
@@ -2688,13 +2688,13 @@ Managing passwords at an enterprise scale presents unique challenges. This compr
 ### Core Policy Components
 
 **1. Password Requirements**
-```
+\`\`\`
 Minimum length: 14 characters (16+ recommended)
 Complexity: Mixed case, numbers, symbols
 Uniqueness: No reuse for 24 generations
 Expiration: Risk-based, not time-based
 Storage: Only in approved password managers
-```
+\`\`\`
 
 **2. Account Categories**
 - **Privileged accounts**: Maximum security
