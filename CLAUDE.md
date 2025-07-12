@@ -30,6 +30,7 @@ The project uses Next.js App Router with the following structure:
   - `layout.tsx`: Root layout with metadata and Google Analytics
   - `globals.css`: Global styles with custom neon/glassmorphism theme
   - `Toast.tsx`: Toast notification component for user feedback
+  - `blog/`: Blog section with SEO-optimized security articles
 
 ## Key Technical Details
 
