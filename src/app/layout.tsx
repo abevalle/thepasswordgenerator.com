@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: 'The Password Generator - Secure & Random Passwords',
   description: 'Generate secure, random passwords with The Password Generator. Enhance your online security with strong, unique passwords.',
   keywords: 'password generator, passwords, security, strong passwords, random passwords, online security',
+  authors: [{ name: 'AbeValle', url: 'https://abevalle.com' }],
   viewport: 'width=device-width, initial-scale=1.0',
   openGraph: {
     type: 'website',
