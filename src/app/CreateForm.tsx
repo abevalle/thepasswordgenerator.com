@@ -23,7 +23,7 @@ export default function CreateForm() {
         return result
     }
 
-    const generatePassword = (opts: optsInterface) => {
+    const generatePassword = useCallback((opts: optsInterface) => {
         let result = ''
         let AZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         let az = "abcdefghijklmnopqrstuvwxyz"
@@ -45,7 +45,7 @@ export default function CreateForm() {
             counter += 1
         }
         return result;
-    }
+    }, [])
 
     const [passwordOpts, setPasswordOpts] = useState<optsInterface>({
         az: true,
@@ -59,6 +59,11 @@ export default function CreateForm() {
     const [disabledOpts, setDisabledOpts] = useState<string[]>([]);
     const [toastMessage, setToastMessage] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
     const [generatedPassword, setGeneratedPassword] = useState<string>("");
+    const [isBatchMode, setIsBatchMode] = useState<boolean>(false);
+    const [batchCount, setBatchCount] = useState<number>(10);
+    const [batchPasswords, setBatchPasswords] = useState<string[]>([]);
+    const [isCustomBatch, setIsCustomBatch] = useState<boolean>(false);
+    const [customBatchCount, setCustomBatchCount] = useState<number>(25);
 
     const updateGeneratedPassword = useCallback((opts: optsInterface) => {
         const newPassword = generatePassword(opts);
@@ -68,7 +73,7 @@ export default function CreateForm() {
             action: 'Generated Password',
             label: `Length: ${opts.pwLength}`
         });
-    }, []);
+    }, [generatePassword]);
 
     useEffect(() => {
         updateGeneratedPassword(passwordOpts);
@@ -124,31 +129,174 @@ export default function CreateForm() {
         });
     };
 
+    const generateBatchPasswords = (count: number) => {
+        const actualCount = isCustomBatch ? customBatchCount : count;
+        const passwords: string[] = [];
+        for (let i = 0; i < actualCount; i++) {
+            passwords.push(generatePassword(passwordOpts));
+        }
+        setBatchPasswords(passwords);
+        ReactGA.event({
+            category: 'User',
+            action: 'Generated Batch Passwords',
+            label: `Count: ${actualCount}`
+        });
+    };
+
     const handleGeneratePasswordClick = () => {
-        updateGeneratedPassword(passwordOpts);
+        if (isBatchMode) {
+            generateBatchPasswords(batchCount);
+        } else {
+            updateGeneratedPassword(passwordOpts);
+        }
+    };
+
+    const handleCopyAllPasswords = () => {
+        const allPasswords = batchPasswords.join('\n');
+        navigator.clipboard.writeText(allPasswords);
+        setToastMessage({ message: `${batchPasswords.length} passwords copied to clipboard!`, type: 'success' });
+        ReactGA.event({
+            category: 'User',
+            action: 'Copied Batch Passwords',
+            label: `Count: ${batchPasswords.length}`
+        });
+    };
+
+    const handleDownloadPasswords = () => {
+        const content = batchPasswords.join('\n');
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `passwords_${new Date().getTime()}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        ReactGA.event({
+            category: 'User',
+            action: 'Downloaded Batch Passwords',
+            label: `Count: ${batchPasswords.length}`
+        });
     };
 
     return (
-        <div className="flex flex-row items-center justify-center generator relative">
+        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center generator relative gap-4">
             {toastMessage && (
                 <Toast message={toastMessage.message} type={toastMessage.type} onClose={() => setToastMessage(null)} />
             )}
             <form className="generator-form w-full max-w-md p-4 sm:p-8 rounded-2xl">
-                <div className="flex flex-col sm:flex-row rounded-xl overflow-hidden mb-6 sm:mb-8 group">
-                    <input 
-                        type="text" 
-                        id="generatedPassword" 
-                        value={generatedPassword} 
-                        className="password-input py-3 sm:py-4 px-3 sm:px-4 block w-full text-lg sm:text-xl text-purple-100 rounded-xl sm:rounded-l-xl sm:rounded-r-none mb-2 sm:mb-0" 
-                        readOnly 
-                    />
-                    <button
-                        type="button"
-                        onClick={handleCopyPassword}
-                        className="neon-button w-full sm:w-auto px-4 sm:px-8 py-3 sm:py-4 text-white font-semibold whitespace-nowrap"
-                    >
-                        Copy
-                    </button>
+                {!isBatchMode && (
+                    <div className="flex flex-col sm:flex-row rounded-xl overflow-hidden mb-6 sm:mb-8 group">
+                        <input 
+                            type="text" 
+                            id="generatedPassword" 
+                            value={generatedPassword} 
+                            className="password-input py-3 sm:py-4 px-3 sm:px-4 block w-full text-lg sm:text-xl text-purple-100 rounded-xl sm:rounded-l-xl sm:rounded-r-none mb-2 sm:mb-0" 
+                            readOnly 
+                        />
+                        <button
+                            type="button"
+                            onClick={handleCopyPassword}
+                            className="neon-button w-full sm:w-auto px-4 sm:px-8 py-3 sm:py-4 text-white font-semibold whitespace-nowrap"
+                        >
+                            Copy
+                        </button>
+                    </div>
+                )}
+                
+                <div className="mb-6">
+                    <div className="flex items-center justify-between mb-4">
+                        <label className="text-neutral-200 font-medium">Generation Mode</label>
+                        <div className="inline-flex rounded-lg bg-gray-800 p-1">
+                            <button
+                                type="button"
+                                onClick={() => setIsBatchMode(false)}
+                                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
+                                    !isBatchMode 
+                                        ? 'bg-purple-600 text-white shadow-lg' 
+                                        : 'text-gray-400 hover:text-white'
+                                }`}
+                            >
+                                Single
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setIsBatchMode(true)}
+                                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
+                                    isBatchMode 
+                                        ? 'bg-purple-600 text-white shadow-lg' 
+                                        : 'text-gray-400 hover:text-white'
+                                }`}
+                            >
+                                Batch
+                            </button>
+                        </div>
+                    </div>
+                    
+                    {isBatchMode && (
+                        <div className="flex items-center justify-between">
+                            <label className="text-neutral-400 text-sm">Quantity</label>
+                            <div className="flex items-center gap-2">
+                                <div className="inline-flex rounded-lg bg-gray-800 p-1">
+                                    <button
+                                        type="button"
+                                        onClick={() => { setBatchCount(10); setIsCustomBatch(false); }}
+                                        className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
+                                            batchCount === 10 && !isCustomBatch
+                                                ? 'bg-purple-600 text-white shadow-lg' 
+                                                : 'text-gray-400 hover:text-white'
+                                        }`}
+                                    >
+                                        10
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => { setBatchCount(50); setIsCustomBatch(false); }}
+                                        className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
+                                            batchCount === 50 && !isCustomBatch
+                                                ? 'bg-purple-600 text-white shadow-lg' 
+                                                : 'text-gray-400 hover:text-white'
+                                        }`}
+                                    >
+                                        50
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => { setBatchCount(100); setIsCustomBatch(false); }}
+                                        className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
+                                            batchCount === 100 && !isCustomBatch
+                                                ? 'bg-purple-600 text-white shadow-lg' 
+                                                : 'text-gray-400 hover:text-white'
+                                        }`}
+                                    >
+                                        100
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsCustomBatch(true)}
+                                        className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
+                                            isCustomBatch
+                                                ? 'bg-purple-600 text-white shadow-lg' 
+                                                : 'text-gray-400 hover:text-white'
+                                        }`}
+                                    >
+                                        Custom
+                                    </button>
+                                </div>
+                                {isCustomBatch && (
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        max="1000"
+                                        value={customBatchCount}
+                                        onChange={(e) => setCustomBatchCount(Math.min(1000, Math.max(1, parseInt(e.target.value) || 1)))}
+                                        className="w-20 px-2 py-1 text-sm text-white bg-gray-800 border border-gray-600 rounded-md focus:border-purple-500 focus:outline-none"
+                                    />
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <div className="mt-2 mb-2">
                     <label className="w-full block text-neutral-700 dark:text-neutral-200 mb-2">Password Length</label>
@@ -188,9 +336,50 @@ export default function CreateForm() {
                     onClick={handleGeneratePasswordClick} 
                     className="neon-button w-full mt-8 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5"
                 >
-                    Generate Password
+                    {isBatchMode ? `Generate ${isCustomBatch ? customBatchCount : batchCount} Passwords` : 'Generate Password'}
                 </button>
             </form>
+            
+            {isBatchMode && batchPasswords.length > 0 && (
+                <div className="generator-form w-full max-w-md p-4 sm:p-8 rounded-2xl">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-lg font-semibold text-gray-200">Generated {batchPasswords.length} Passwords</h3>
+                        <div className="flex gap-2">
+                            <button
+                                type="button"
+                                onClick={handleCopyAllPasswords}
+                                className="neon-button px-4 py-2 text-sm text-white font-semibold rounded-lg"
+                            >
+                                Copy All
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleDownloadPasswords}
+                                className="neon-button px-4 py-2 text-sm text-white font-semibold rounded-lg"
+                            >
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                    <div className="max-h-96 overflow-y-auto bg-gray-900 rounded-xl p-4 border border-gray-700">
+                        {batchPasswords.map((password, index) => (
+                            <div key={index} className="flex justify-between items-center py-2 hover:bg-gray-800 px-2 rounded">
+                                <span className="text-purple-100 font-mono text-sm break-all mr-2">{password}</span>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(password);
+                                        setToastMessage({ message: 'Password copied!', type: 'success' });
+                                    }}
+                                    className="text-xs px-3 py-1 text-purple-300 hover:text-purple-100 transition-colors shrink-0"
+                                >
+                                    Copy
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

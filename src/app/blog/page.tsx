@@ -102,7 +102,7 @@ const blogPosts = [
 export default function BlogPage() {
   return (
     <div className="min-h-screen px-4 py-12">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-bold text-center mb-4 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
           Security Blog
         </h1>
@@ -110,22 +110,26 @@ export default function BlogPage() {
           Tips, guides, and insights for better password security
         </p>
         
-        <div className="grid gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {blogPosts.map((post) => (
             <Link href={`/blog/${post.slug}`} key={post.slug}>
-              <article className="glass-card p-6 rounded-xl transition-all hover:scale-[1.02] hover:shadow-2xl cursor-pointer">
-                <div className="flex justify-between items-start mb-3">
-                  <h2 className="text-2xl font-semibold text-white hover:text-blue-400 transition-colors">
+              <article className="blog-card h-full flex flex-col">
+                <div className="flex-grow">
+                  <h2 className="text-xl font-semibold text-white mb-3 line-clamp-2 hover:text-blue-400 transition-colors">
                     {post.title}
                   </h2>
-                  <span className="text-sm text-gray-500">{post.readTime}</span>
+                  <p className="text-gray-400 text-sm mb-4 line-clamp-3">{post.excerpt}</p>
                 </div>
-                <p className="text-gray-400 mb-4">{post.excerpt}</p>
-                <time className="text-sm text-gray-500">{new Date(post.date).toLocaleDateString('en-US', { 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })}</time>
+                <div className="mt-auto">
+                  <div className="flex justify-between items-center">
+                    <time className="text-xs text-gray-500">{new Date(post.date).toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'short', 
+                      day: 'numeric' 
+                    })}</time>
+                    <span className="text-xs text-purple-400">{post.readTime}</span>
+                  </div>
+                </div>
               </article>
             </Link>
           ))}
