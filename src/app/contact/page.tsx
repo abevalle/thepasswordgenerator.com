@@ -34,7 +34,7 @@ export default function Contact() {
                 <ul className="list-disc ml-6 space-y-2 mt-3">
                   <li><strong>Client-Side Generation:</strong> All passwords are generated locally in your browser using the Web Crypto API</li>
                   <li><strong>crypto.getRandomValues():</strong> We use this secure method to ensure true randomness, not predictable patterns</li>
-                  <li><strong>Zero Server Contact:</strong> Your passwords never leave your device - we can't see, store, or log them</li>
+                  <li><strong>Zero Server Contact:</strong> Your passwords never leave your device - we can&apos;t see, store, or log them</li>
                   <li><strong>Customizable Options:</strong> Choose your character sets, length, and exclude ambiguous characters as needed</li>
                 </ul>
                 <p className="mt-3">
@@ -59,7 +59,7 @@ export default function Contact() {
               <section>
                 <h2 className="text-2xl font-semibold mb-4 text-white">Security & Privacy</h2>
                 <p>
-                  Your security is our top priority. We've designed this tool with privacy in mind:
+                  Your security is our top priority. We&apos;ve designed this tool with privacy in mind:
                 </p>
                 <ul className="list-disc ml-6 space-y-2 mt-3">
                   <li>No passwords are ever transmitted to our servers</li>
@@ -72,7 +72,7 @@ export default function Contact() {
               <section>
                 <h2 className="text-2xl font-semibold mb-4 text-white">Contact</h2>
                 <p>
-                  Questions or feedback about The Password Generator? We'd love to hear from you.
+                  Questions or feedback about The Password Generator? We&apos;d love to hear from you.
                 </p>
                 <div className="mt-4">
                   <p className="text-sm text-gray-400">

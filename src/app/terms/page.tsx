@@ -45,7 +45,7 @@ export default function Terms() {
               <section>
                 <h2 className="text-2xl font-semibold mb-4 text-white">Disclaimers</h2>
                 <p>
-                  This service is provided "as is" without warranties of any kind. While we use cryptographically secure methods 
+                  This service is provided &quot;as is&quot; without warranties of any kind. While we use cryptographically secure methods 
                   for password generation, we cannot guarantee absolute security and are not liable for any security breaches 
                   that may occur from the use of generated passwords.
                 </p>

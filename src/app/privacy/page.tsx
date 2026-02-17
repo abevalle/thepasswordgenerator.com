@@ -51,7 +51,7 @@ export default function Privacy() {
               <section>
                 <h2 className="text-2xl font-semibold mb-4 text-white">Third-Party Services</h2>
                 <p>
-                  We use Google Analytics for website analytics. Please review Google's Privacy Policy for information about their data practices.
+                  We use Google Analytics for website analytics. Please review Google&apos;s Privacy Policy for information about their data practices.
                 </p>
               </section>
 
