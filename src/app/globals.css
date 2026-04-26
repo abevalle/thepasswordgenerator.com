@@ -333,6 +333,16 @@ input[type="number"]::-webkit-outer-spin-button {
     filter: brightness(1.2);
 }
 
+.nav-logo-mark {
+    filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.35));
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.nav-logo:hover .nav-logo-mark {
+    filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.55));
+    transform: translateY(-1px);
+}
+
 .nav-logo-glow {
     position: absolute;
     inset: -10px;

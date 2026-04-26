@@ -1,6 +1,7 @@
 "use client"
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
 export default function Navigation() {
@@ -14,7 +15,15 @@ export default function Navigation() {
     <nav className="fixed top-0 left-0 right-0 z-50 nav-glass">
       <div className="container mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
-          <Link href="/" className="nav-logo group">
+          <Link href="/" className="nav-logo group flex items-center gap-3">
+            <Image
+              src="/logo.svg"
+              alt=""
+              width={36}
+              height={36}
+              priority
+              className="nav-logo-mark"
+            />
             <span className="relative">
               The Password Generator
               <span className="nav-logo-glow"></span>

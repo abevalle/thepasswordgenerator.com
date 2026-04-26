@@ -1,0 +1,33 @@
+<svg width="40" height="40" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logo-stroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="logo-dot" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#c084fc"/>
+    </linearGradient>
+    <filter id="logo-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect x="6" y="20" width="52" height="24" rx="5"
+        fill="rgba(99, 102, 241, 0.08)"
+        stroke="url(#logo-stroke)"
+        stroke-width="2.5"
+        filter="url(#logo-glow)"/>
+
+  <circle cx="17" cy="32" r="3.2" fill="url(#logo-dot)" filter="url(#logo-glow)"/>
+  <circle cx="28" cy="32" r="3.2" fill="url(#logo-dot)" filter="url(#logo-glow)"/>
+  <circle cx="39" cy="32" r="3.2" fill="url(#logo-dot)" filter="url(#logo-glow)"/>
+
+  <rect x="48" y="26" width="2" height="12" rx="1" fill="url(#logo-dot)" filter="url(#logo-glow)">
+    <animate attributeName="opacity" values="1;0.25;1" dur="1.2s" repeatCount="indefinite"/>
+  </rect>
+</svg>

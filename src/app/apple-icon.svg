@@ -1,0 +1,44 @@
+<svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#0a0a0f"/>
+    </linearGradient>
+    <radialGradient id="glow-bg" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="rgba(168, 85, 247, 0.25)"/>
+      <stop offset="100%" stop-color="rgba(168, 85, 247, 0)"/>
+    </radialGradient>
+    <linearGradient id="stroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="dot" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#c084fc"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="180" height="180" rx="40" fill="url(#bg)"/>
+  <rect width="180" height="180" rx="40" fill="url(#glow-bg)"/>
+
+  <rect x="22" y="58" width="136" height="64" rx="14"
+        fill="rgba(99, 102, 241, 0.08)"
+        stroke="url(#stroke)"
+        stroke-width="5"
+        filter="url(#glow)"/>
+
+  <circle cx="50" cy="90" r="9" fill="url(#dot)" filter="url(#glow)"/>
+  <circle cx="78" cy="90" r="9" fill="url(#dot)" filter="url(#glow)"/>
+  <circle cx="106" cy="90" r="9" fill="url(#dot)" filter="url(#glow)"/>
+
+  <rect x="128" y="74" width="5" height="32" rx="2.5" fill="url(#dot)" filter="url(#glow)">
+    <animate attributeName="opacity" values="1;0.2;1" dur="1.2s" repeatCount="indefinite"/>
+  </rect>
+</svg>
