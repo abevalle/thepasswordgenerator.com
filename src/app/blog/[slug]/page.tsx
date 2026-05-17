@@ -3500,19 +3500,19 @@ function formatContent(content: string) {
     
     if (line.startsWith('# ')) {
       elements.push(
-        <h1 key={i} className="text-3xl md:text-4xl font-bold mb-6 mt-8 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+        <h1 key={i} className="text-3xl md:text-4xl font-bold mb-6 mt-8 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-rose-600">
           {line.substring(2)}
         </h1>
       );
     } else if (line.startsWith('## ')) {
       elements.push(
-        <h2 key={i} className="text-2xl md:text-3xl font-semibold mb-4 mt-6 text-white">
+        <h2 key={i} className="text-2xl md:text-3xl font-semibold mb-4 mt-6 text-gray-900 dark:text-white">
           {line.substring(3)}
         </h2>
       );
     } else if (line.startsWith('### ')) {
       elements.push(
-        <h3 key={i} className="text-xl md:text-2xl font-semibold mb-3 mt-4 text-gray-200">
+        <h3 key={i} className="text-xl md:text-2xl font-semibold mb-3 mt-4 text-gray-800 dark:text-gray-200">
           {line.substring(4)}
         </h3>
       );
@@ -3528,7 +3528,7 @@ function formatContent(content: string) {
         j++;
       }
       elements.push(
-        <ul key={i} className="list-disc list-inside mb-4 text-gray-300 space-y-2 pl-4">
+        <ul key={i} className="list-disc list-inside mb-4 text-gray-700 dark:text-gray-300 space-y-2 pl-4">
           {listItems}
         </ul>
       );
@@ -3545,7 +3545,7 @@ function formatContent(content: string) {
         j++;
       }
       elements.push(
-        <ol key={i} className="list-decimal list-inside mb-4 text-gray-300 space-y-2 pl-4">
+        <ol key={i} className="list-decimal list-inside mb-4 text-gray-700 dark:text-gray-300 space-y-2 pl-4">
           {listItems}
         </ol>
       );
@@ -3554,7 +3554,7 @@ function formatContent(content: string) {
       elements.push(<div key={i} className="mb-4" />);
     } else {
       elements.push(
-        <p key={i} className="mb-4 text-gray-300 leading-relaxed">
+        <p key={i} className="mb-4 text-gray-700 dark:text-gray-300 leading-relaxed">
           {formatInlineText(line)}
         </p>
       );
@@ -3568,9 +3568,9 @@ function formatInlineText(text: string) {
   const parts = text.split(/(\*\*[^*]+\*\*|\`[^\`]+\`)/g);
   return parts.map((part, index) => {
     if (part.startsWith('**') && part.endsWith('**')) {
-      return <strong key={index} className="text-white font-semibold">{part.slice(2, -2)}</strong>;
+      return <strong key={index} className="text-gray-900 dark:text-white font-semibold">{part.slice(2, -2)}</strong>;
     } else if (part.startsWith('`') && part.endsWith('`')) {
-      return <code key={index} className="bg-gray-800 px-2 py-1 rounded text-blue-400 font-mono text-sm">{part.slice(1, -1)}</code>;
+      return <code key={index} className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-indigo-600 dark:text-indigo-400 font-mono text-sm">{part.slice(1, -1)}</code>;
     }
     return part;
   });
@@ -3586,32 +3586,32 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
   return (
     <article className="min-h-screen px-4 py-12">
       <div className="max-w-3xl mx-auto">
-        <Link href="/blog" className="inline-flex items-center text-blue-400 hover:text-blue-300 mb-8 transition-colors">
-          ← Back to Blog
+        <Link href="/blog" className="inline-flex items-center text-indigo-600 dark:text-indigo-400 hover:underline mb-8 transition-colors">
+          &larr; Back to Blog
         </Link>
-        
+
         <header className="mb-8">
-          <h1 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-3xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-rose-600">
             {post.title}
           </h1>
-          <div className="flex gap-4 text-sm text-gray-500">
-            <time>{new Date(post.date).toLocaleDateString('en-US', { 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric' 
+          <div className="flex gap-4 text-sm text-gray-500 dark:text-gray-400">
+            <time>{new Date(post.date).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
             })}</time>
-            <span>•</span>
+            <span>&bull;</span>
             <span>{post.readTime}</span>
           </div>
         </header>
-        
-        <div className="glass-card p-8 rounded-xl">
+
+        <div className="rounded-2xl bg-white/60 backdrop-blur-lg dark:bg-gray-800/50 p-6 sm:p-10 shadow-xl border border-gray-200/60 dark:border-gray-700/60">
           {formatContent(post.content)}
         </div>
-        
+
         <footer className="mt-12 text-center">
-          <Link href="/blog" className="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors">
-            ← Back to all posts
+          <Link href="/blog" className="inline-flex items-center text-indigo-600 dark:text-indigo-400 hover:underline transition-colors">
+            &larr; Back to all posts
           </Link>
         </footer>
       </div>
