@@ -23,6 +23,15 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     description: post.seo.description,
     keywords: post.seo.keywords || undefined,
     alternates: { canonical: `/blog/${post.slug}` },
+    openGraph: post.image
+      ? {
+          title: post.seo.title,
+          description: post.seo.description,
+          type: 'article',
+          url: `https://thepasswordgenerator.com/blog/${post.slug}`,
+          images: [{ url: post.image.large, alt: post.image.alt }],
+        }
+      : undefined,
   };
 }
 
@@ -139,6 +148,23 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             <span>{post.readTime}</span>
           </div>
         </header>
+
+        {post.image && (
+          <figure className="mb-8 overflow-hidden rounded-2xl border border-gray-200/60 dark:border-gray-700/60 shadow-xl">
+            {/* eslint-disable-next-line @next/next/no-img-element -- remote host not in next.config images */}
+            <img
+              src={post.image.large}
+              srcSet={`${post.image.medium} 750w, ${post.image.large} 1000w, ${post.image.url} ${post.image.width}w`}
+              sizes="(min-width: 768px) 768px, 100vw"
+              alt={post.image.alt}
+              width={post.image.width}
+              height={post.image.height}
+              fetchPriority="high"
+              decoding="async"
+              className="aspect-video w-full object-cover"
+            />
+          </figure>
+        )}
 
         <div className="rounded-2xl bg-white/60 backdrop-blur-lg dark:bg-gray-800/50 p-6 sm:p-10 shadow-xl border border-gray-200/60 dark:border-gray-700/60">
           {formatContent(post.content)}
