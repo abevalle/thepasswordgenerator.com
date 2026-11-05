@@ -53,13 +53,13 @@ export default function Footer() {
           <div className="mt-6 flex flex-col items-center text-sm text-gray-600 dark:text-gray-400">
             <p>
               &copy; {new Date().getFullYear()}{' '}
-              <span className="font-semibold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-rose-600">
+              <span className="gradient-text font-semibold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-rose-600">
                 The Password Generator
               </span>
             </p>
             <p className="mt-1">
               Made with{' '}
-              <span className="text-rose-500" aria-label="love">&hearts;</span>{' '}
+              <span className="text-rose-500" role="img" aria-label="love">&hearts;</span>{' '}
               by{' '}
               <a
                 href="https://abevalle.com"

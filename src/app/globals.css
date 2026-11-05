@@ -93,3 +93,19 @@ input[type="number"]::-webkit-outer-spin-button {
     font-size: 16px;
   }
 }
+
+/* Selection is otherwise shown by background color, which forced-colors mode
+   removes, and gradient text is transparent text over a background image. */
+@media (forced-colors: active) {
+  button[aria-pressed="true"] {
+    forced-color-adjust: none;
+    background-color: Highlight;
+    color: HighlightText;
+  }
+
+  .gradient-text {
+    background-image: none;
+    color: CanvasText;
+    -webkit-text-fill-color: CanvasText;
+  }
+}

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import Toast from './Toast'; // Adjust the import path as necessary
@@ -20,6 +20,11 @@ const toLeet = (text: string) =>
     text.split('').map(c => LEET_MAP[c.toLowerCase()] ?? c).join('');
 
 const cap = (w: string) => w.charAt(0).toUpperCase() + w.slice(1);
+
+const pluralizePasswords = (count: number) => `${count} password${count === 1 ? '' : 's'}`;
+
+// Unselected segmented-control option. Hover keeps at least 4.5:1 in both color schemes.
+const TOGGLE_OFF = 'text-gray-700 hover:text-gray-900 hover:bg-gray-200 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700';
 
 export default function CreateForm() {
 
@@ -135,6 +140,28 @@ export default function CreateForm() {
     const [batchPasswords, setBatchPasswords] = useState<string[]>([]);
     const [isCustomBatch, setIsCustomBatch] = useState<boolean>(false);
     const [customBatchCount, setCustomBatchCount] = useState<number>(25);
+    const [liveMessage, setLiveMessage] = useState<string>("");
+    const liveMessageTimer = useRef<ReturnType<typeof setTimeout>>();
+
+    // Clear first: screen readers only announce a DOM change, so repeating the
+    // same message (a second Copy press) would otherwise be silent.
+    const announce = useCallback((message: string) => {
+        setLiveMessage("");
+        clearTimeout(liveMessageTimer.current);
+        liveMessageTimer.current = setTimeout(() => setLiveMessage(message), 100);
+    }, []);
+
+    const copyToClipboard = async (text: string, toast: string, announcement: string) => {
+        try {
+            await navigator.clipboard.writeText(text);
+        } catch {
+            setToastMessage({ message: 'Could not copy to clipboard.', type: 'error' });
+            return false;
+        }
+        setToastMessage({ message: toast, type: 'success' });
+        announce(announcement);
+        return true;
+    };
 
     const generateForCurrentMode = useCallback(() => {
         if (mode === 'passphrase') return generatePassphrase(passphraseOpts);
@@ -197,9 +224,8 @@ export default function CreateForm() {
         });
     };
 
-    const handleCopyPassword = () => {
-        navigator.clipboard.writeText(generatedPassword);
-        setToastMessage({ message: 'Password copied to clipboard!', type: 'success' });
+    const handleCopyPassword = async () => {
+        if (!await copyToClipboard(generatedPassword, 'Password copied to clipboard!', 'Copied to clipboard')) return;
         ReactGA.event({
             category: 'User',
             action: 'Copied Password'
@@ -238,10 +264,10 @@ export default function CreateForm() {
         });
     };
 
-    const handleCopyAllPasswords = () => {
+    const handleCopyAllPasswords = async () => {
         const allPasswords = batchPasswords.join('\n');
-        navigator.clipboard.writeText(allPasswords);
-        setToastMessage({ message: `${batchPasswords.length} passwords copied to clipboard!`, type: 'success' });
+        const count = pluralizePasswords(batchPasswords.length);
+        if (!await copyToClipboard(allPasswords, `${count} copied to clipboard!`, `${count} copied to clipboard`)) return;
         ReactGA.event({
             category: 'User',
             action: 'Copied Batch Passwords',
@@ -260,6 +286,7 @@ export default function CreateForm() {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+        announce(`Download started: ${pluralizePasswords(batchPasswords.length)}`);
         ReactGA.event({
             category: 'User',
             action: 'Downloaded Batch Passwords',
@@ -269,6 +296,7 @@ export default function CreateForm() {
 
     return (
         <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center generator relative gap-4">
+            <div aria-live="polite" aria-atomic="true" className="sr-only">{liveMessage}</div>
             {toastMessage && (
                 <Toast message={toastMessage.message} type={toastMessage.type} onClose={() => setToastMessage(null)} />
             )}
@@ -278,6 +306,7 @@ export default function CreateForm() {
                         <input 
                             type="text" 
                             id="generatedPassword" 
+                            aria-label="Generated password"
                             value={generatedPassword} 
                             className="font-mono py-3 sm:py-4 px-3 sm:px-4 block w-full text-lg sm:text-xl text-gray-900 dark:text-indigo-100 bg-white/70 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-xl sm:rounded-l-xl sm:rounded-r-none mb-2 sm:mb-0 focus:outline-none focus:ring-2 focus:ring-indigo-500" 
                             readOnly 
@@ -285,7 +314,7 @@ export default function CreateForm() {
                         <button
                             type="button"
                             onClick={handleCopyPassword}
-                            className="w-full sm:w-auto px-4 sm:px-8 py-3 sm:py-4 text-white font-semibold whitespace-nowrap bg-indigo-500 hover:bg-indigo-600 transition-all duration-200 hover:shadow-lg rounded-xl sm:rounded-l-none sm:rounded-r-xl"
+                            className="w-full sm:w-auto px-4 sm:px-8 py-3 sm:py-4 text-white font-semibold whitespace-nowrap bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 hover:shadow-lg rounded-xl sm:rounded-l-none sm:rounded-r-xl focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white"
                         >
                             Copy
                         </button>
@@ -294,15 +323,16 @@ export default function CreateForm() {
                 
                 <div className="mb-6">
                     <div className="flex items-center justify-between mb-4">
-                        <label className="text-gray-700 dark:text-gray-200 font-medium">Password Style</label>
-                        <div className="inline-flex rounded-lg bg-gray-100 dark:bg-gray-800 p-1">
+                        <span id="passwordStyleLabel" className="text-gray-700 dark:text-gray-200 font-medium">Password Style</span>
+                        <div role="group" aria-labelledby="passwordStyleLabel" className="inline-flex rounded-lg bg-gray-100 dark:bg-gray-800 p-1">
                             <button
                                 type="button"
                                 onClick={() => handleModeChange('random')}
-                                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                                aria-pressed={mode === 'random'}
+className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
                                     mode === 'random'
                                         ? 'bg-purple-600 text-white shadow-lg'
-                                        : 'text-gray-400 hover:text-white'
+                                        : TOGGLE_OFF
                                 }`}
                             >
                                 Random
@@ -310,10 +340,11 @@ export default function CreateForm() {
                             <button
                                 type="button"
                                 onClick={() => handleModeChange('passphrase')}
-                                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                                aria-pressed={mode === 'passphrase'}
+className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
                                     mode === 'passphrase'
                                         ? 'bg-purple-600 text-white shadow-lg'
-                                        : 'text-gray-400 hover:text-white'
+                                        : TOGGLE_OFF
                                 }`}
                             >
                                 Passphrase
@@ -321,10 +352,11 @@ export default function CreateForm() {
                             <button
                                 type="button"
                                 onClick={() => handleModeChange('easy')}
-                                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                                aria-pressed={mode === 'easy'}
+className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
                                     mode === 'easy'
                                         ? 'bg-purple-600 text-white shadow-lg'
-                                        : 'text-gray-400 hover:text-white'
+                                        : TOGGLE_OFF
                                 }`}
                             >
                                 Easy
@@ -335,15 +367,16 @@ export default function CreateForm() {
 
                 <div className="mb-6">
                     <div className="flex items-center justify-between mb-4">
-                        <label className="text-gray-700 dark:text-gray-200 font-medium">Generation Mode</label>
-                        <div className="inline-flex rounded-lg bg-gray-100 dark:bg-gray-800 p-1">
+                        <span id="generationModeLabel" className="text-gray-700 dark:text-gray-200 font-medium">Generation Mode</span>
+                        <div role="group" aria-labelledby="generationModeLabel" className="inline-flex rounded-lg bg-gray-100 dark:bg-gray-800 p-1">
                             <button
                                 type="button"
                                 onClick={() => setIsBatchMode(false)}
-                                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
+                                aria-pressed={!isBatchMode}
+className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
                                     !isBatchMode
                                         ? 'bg-purple-600 text-white shadow-lg'
-                                        : 'text-gray-400 hover:text-white'
+                                        : TOGGLE_OFF
                                 }`}
                             >
                                 Single
@@ -351,10 +384,11 @@ export default function CreateForm() {
                             <button
                                 type="button"
                                 onClick={() => setIsBatchMode(true)}
-                                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
+                                aria-pressed={isBatchMode}
+className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
                                     isBatchMode
                                         ? 'bg-purple-600 text-white shadow-lg'
-                                        : 'text-gray-400 hover:text-white'
+                                        : TOGGLE_OFF
                                 }`}
                             >
                                 Batch
@@ -364,16 +398,17 @@ export default function CreateForm() {
                     
                     {isBatchMode && (
                         <div className="flex items-center justify-between">
-                            <label className="text-gray-600 dark:text-gray-400 text-sm">Quantity</label>
+                            <span id="quantityLabel" className="text-gray-600 dark:text-gray-400 text-sm">Quantity</span>
                             <div className="flex items-center gap-2">
-                                <div className="inline-flex rounded-lg bg-gray-100 dark:bg-gray-800 p-1">
+                                <div role="group" aria-labelledby="quantityLabel" className="inline-flex rounded-lg bg-gray-100 dark:bg-gray-800 p-1">
                                     <button
                                         type="button"
                                         onClick={() => { setBatchCount(10); setIsCustomBatch(false); }}
-                                        className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
+                                        aria-pressed={batchCount === 10 && !isCustomBatch}
+className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
                                             batchCount === 10 && !isCustomBatch
                                                 ? 'bg-purple-600 text-white shadow-lg' 
-                                                : 'text-gray-400 hover:text-white'
+                                                : TOGGLE_OFF
                                         }`}
                                     >
                                         10
@@ -381,10 +416,11 @@ export default function CreateForm() {
                                     <button
                                         type="button"
                                         onClick={() => { setBatchCount(50); setIsCustomBatch(false); }}
-                                        className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
+                                        aria-pressed={batchCount === 50 && !isCustomBatch}
+className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
                                             batchCount === 50 && !isCustomBatch
                                                 ? 'bg-purple-600 text-white shadow-lg' 
-                                                : 'text-gray-400 hover:text-white'
+                                                : TOGGLE_OFF
                                         }`}
                                     >
                                         50
@@ -392,10 +428,11 @@ export default function CreateForm() {
                                     <button
                                         type="button"
                                         onClick={() => { setBatchCount(100); setIsCustomBatch(false); }}
-                                        className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
+                                        aria-pressed={batchCount === 100 && !isCustomBatch}
+className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
                                             batchCount === 100 && !isCustomBatch
                                                 ? 'bg-purple-600 text-white shadow-lg' 
-                                                : 'text-gray-400 hover:text-white'
+                                                : TOGGLE_OFF
                                         }`}
                                     >
                                         100
@@ -403,10 +440,11 @@ export default function CreateForm() {
                                     <button
                                         type="button"
                                         onClick={() => setIsCustomBatch(true)}
-                                        className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
+                                        aria-pressed={isCustomBatch}
+className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
                                             isCustomBatch
                                                 ? 'bg-purple-600 text-white shadow-lg' 
-                                                : 'text-gray-400 hover:text-white'
+                                                : TOGGLE_OFF
                                         }`}
                                     >
                                         Custom
@@ -414,6 +452,7 @@ export default function CreateForm() {
                                 </div>
                                 {isCustomBatch && (
                                     <input
+                                        aria-label="Custom quantity"
                                         type="number"
                                         min="1"
                                         max="1000"
@@ -429,10 +468,10 @@ export default function CreateForm() {
                 {mode === 'random' && (
                     <>
                         <div className="mt-2 mb-2">
-                            <label className="w-full block text-gray-700 dark:text-gray-200 mb-2">Password Length</label>
+                            <label htmlFor="pwLengthInput" className="w-full block text-gray-700 dark:text-gray-200 mb-2">Password Length</label>
                             <div className="flex items-center">
-                                <input type="number" min="8" max="256" value={passwordOpts.pwLength} onChange={handleInputChange} className="w-1/4 text-gray-900 dark:text-white bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded mr-2 px-2 py-1" />
-                                <input type="range" min="8" max="256" value={passwordOpts.pwLength} onChange={handleSliderChange} className="transparent h-[4px] w-full cursor-pointer appearance-none border-transparent bg-gray-200 dark:bg-gray-600" />
+                                <input id="pwLengthInput" type="number" min="8" max="256" value={passwordOpts.pwLength} onChange={handleInputChange} className="w-1/4 text-gray-900 dark:text-white bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded mr-2 px-2 py-1" />
+                                <input aria-label="Password length" type="range" min="8" max="256" value={passwordOpts.pwLength} onChange={handleSliderChange} className="transparent h-[4px] w-full cursor-pointer appearance-none border-transparent bg-gray-200 dark:bg-gray-600" />
                             </div>
                         </div>
                         <label className="relative inline-flex items-center cursor-pointer">
@@ -453,7 +492,7 @@ export default function CreateForm() {
                         <label className="relative inline-flex items-center cursor-pointer">
                             <input type='checkbox' id="special" name="special" className="sr-only peer" checked={passwordOpts.special} onChange={handleCheckboxChange} disabled={disabledOpts.includes('special')}></input>
                             <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                            <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">!@$%&</span>
+                            <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">Symbols (!@$%&)</span>
                         </label><br />
                         <label className="relative inline-flex items-center cursor-pointer tooltip-container">
                             <input type='checkbox' id="ambiguous" name="ambiguous" className="sr-only peer" checked={passwordOpts.ambiguous} onChange={handleCheckboxChange}></input>
@@ -470,11 +509,12 @@ export default function CreateForm() {
                             Memorable phrases like <span className="font-mono text-indigo-600 dark:text-indigo-300">Happy-Tiger-Cloud-42</span>. Easy to type, hard to crack.
                         </p>
                         <div>
-                            <label className="w-full block text-gray-700 dark:text-gray-200 mb-2">
+                            <label htmlFor="passphraseWordCount" className="w-full block text-gray-700 dark:text-gray-200 mb-2">
                                 Number of Words: <span className="text-indigo-600 dark:text-indigo-300 font-mono">{passphraseOpts.wordCount}</span>
                             </label>
                             <div className="flex items-center">
                                 <input
+                                    id="passphraseWordCount"
                                     type="number"
                                     min="2"
                                     max="10"
@@ -483,6 +523,7 @@ export default function CreateForm() {
                                     className="w-1/4 text-gray-900 dark:text-white bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded mr-2 px-2 py-1"
                                 />
                                 <input
+                                    aria-label="Number of words"
                                     type="range"
                                     min="2"
                                     max="10"
@@ -493,8 +534,8 @@ export default function CreateForm() {
                             </div>
                         </div>
                         <div>
-                            <label className="w-full block text-gray-700 dark:text-gray-200 mb-2">Separator</label>
-                            <div className="inline-flex rounded-lg bg-gray-100 dark:bg-gray-800 p-1 flex-wrap">
+                            <span id="separatorLabel" className="w-full block text-gray-700 dark:text-gray-200 mb-2">Separator</span>
+                            <div role="group" aria-labelledby="separatorLabel" className="inline-flex rounded-lg bg-gray-100 dark:bg-gray-800 p-1 flex-wrap">
                                 {[
                                     { value: '-', label: '-' },
                                     { value: '_', label: '_' },
@@ -506,10 +547,11 @@ export default function CreateForm() {
                                         key={opt.value}
                                         type="button"
                                         onClick={() => setPassphraseOpts({ ...passphraseOpts, separator: opt.value })}
-                                        className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
+                                        aria-pressed={passphraseOpts.separator === opt.value}
+className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
                                             passphraseOpts.separator === opt.value
                                                 ? 'bg-purple-600 text-white shadow-lg'
-                                                : 'text-gray-400 hover:text-white'
+                                                : TOGGLE_OFF
                                         }`}
                                     >
                                         {opt.label}
@@ -536,10 +578,11 @@ export default function CreateForm() {
                             Short, memorable passwords like <span className="font-mono text-indigo-600 dark:text-indigo-300">happymonkey42</span>. Perfect for kids and beginners.
                         </p>
                         <div>
-                            <label className="w-full block text-gray-700 dark:text-gray-200 mb-2">
+                            <label htmlFor="easyWordCount" className="w-full block text-gray-700 dark:text-gray-200 mb-2">
                                 Number of Words: <span className="text-indigo-600 dark:text-indigo-300 font-mono">{easyOpts.wordCount}</span>
                             </label>
                             <input
+                                id="easyWordCount"
                                 type="range"
                                 min="1"
                                 max="4"
@@ -549,10 +592,11 @@ export default function CreateForm() {
                             />
                         </div>
                         <div>
-                            <label className="w-full block text-gray-700 dark:text-gray-200 mb-2">
+                            <label htmlFor="easyDigitCount" className="w-full block text-gray-700 dark:text-gray-200 mb-2">
                                 Trailing Digits: <span className="text-indigo-600 dark:text-indigo-300 font-mono">{easyOpts.digitCount}</span>
                             </label>
                             <input
+                                id="easyDigitCount"
                                 type="range"
                                 min="0"
                                 max="6"
@@ -589,19 +633,19 @@ export default function CreateForm() {
             {isBatchMode && batchPasswords.length > 0 && (
                 <div className="w-full max-w-md p-4 sm:p-8 rounded-2xl bg-white/60 backdrop-blur-lg dark:bg-gray-800/50 shadow-xl border border-gray-200/60 dark:border-gray-700/60">
                     <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Generated {batchPasswords.length} Passwords</h3>
+                        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Generated {batchPasswords.length} Passwords</h2>
                         <div className="flex gap-2">
                             <button
                                 type="button"
                                 onClick={handleCopyAllPasswords}
-                                className="px-4 py-2 text-sm text-white font-semibold rounded-lg bg-indigo-500 hover:bg-indigo-600 transition-all duration-200 hover:shadow-lg"
+                                className="px-4 py-2 text-sm text-white font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 hover:shadow-lg"
                             >
                                 Copy All
                             </button>
                             <button
                                 type="button"
                                 onClick={handleDownloadPasswords}
-                                className="px-4 py-2 text-sm text-white font-semibold rounded-lg bg-indigo-500 hover:bg-indigo-600 transition-all duration-200 hover:shadow-lg"
+                                className="px-4 py-2 text-sm text-white font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 hover:shadow-lg"
                             >
                                 Download
                             </button>
@@ -613,10 +657,7 @@ export default function CreateForm() {
                                 <span className="text-gray-800 dark:text-indigo-100 font-mono text-sm break-all mr-2">{password}</span>
                                 <button
                                     type="button"
-                                    onClick={() => {
-                                        navigator.clipboard.writeText(password);
-                                        setToastMessage({ message: 'Password copied!', type: 'success' });
-                                    }}
+                                    onClick={() => copyToClipboard(password, 'Password copied!', 'Copied to clipboard')}
                                     className="text-xs px-3 py-1 text-indigo-600 dark:text-indigo-300 hover:text-indigo-800 dark:hover:text-indigo-100 transition-colors shrink-0"
                                 >
                                     Copy
