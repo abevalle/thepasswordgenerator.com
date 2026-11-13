@@ -15,7 +15,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "How secure are the passwords?",
-    a: "Random-mode passwords use the browser's cryptographic random source where available. With all character sets enabled and 20+ characters, the resulting passwords have well over 120 bits of entropy — far beyond what's feasible to brute-force.",
+    a: "Passwords in every mode are generated with your browser's cryptographic random source (crypto.getRandomValues). With all character sets enabled and 20+ characters, the resulting passwords have well over 120 bits of entropy — far beyond what's feasible to brute-force.",
   },
   {
     q: "What is the difference between Random, Passphrase, and Easy modes?",

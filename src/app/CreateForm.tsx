@@ -5,12 +5,13 @@ import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import Toast from './Toast'; // Adjust the import path as necessary
 import ReactGA from 'react-ga4';
 import { WORD_LIST } from './wordList';
+import { randomInt } from './lib/random';
 
 ReactGA.initialize('G-4HNF0DRJMG');
 
 type PasswordMode = 'random' | 'passphrase' | 'easy';
 
-const pickWord = () => WORD_LIST[Math.floor(Math.random() * WORD_LIST.length)];
+const pickWord = () => WORD_LIST[randomInt(WORD_LIST.length)];
 
 const LEET_MAP: Record<string, string> = {
     a: '@', e: '3', i: '1', o: '0', s: '$', t: '7', l: '1'
@@ -74,7 +75,7 @@ export default function CreateForm() {
         let charListLength = charList.length
         let counter = 0
         while (counter < opts.pwLength) {
-            result += charList.charAt(Math.floor(Math.random() * charListLength));
+            result += charList.charAt(randomInt(charListLength));
             counter += 1
         }
         return result;
@@ -88,7 +89,7 @@ export default function CreateForm() {
         }
         let result = words.join(opts.separator);
         if (opts.appendNumber) {
-            result += Math.floor(Math.random() * 100).toString().padStart(2, '0');
+            result += randomInt(100).toString().padStart(2, '0');
         }
         return result;
     }, []);
@@ -102,7 +103,7 @@ export default function CreateForm() {
         let result = words.join('');
         if (opts.leetspeak) result = toLeet(result);
         for (let i = 0; i < opts.digitCount; i++) {
-            result += Math.floor(Math.random() * 10).toString();
+            result += randomInt(10).toString();
         }
         return result;
     }, []);
